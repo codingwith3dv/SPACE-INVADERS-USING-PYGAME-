@@ -16,15 +16,18 @@ myfont = pygame.font.Font("/storage/emulated/0/CODING/Fonts/times new roman bold
 
 current_players_score = 0
 
+#score
 def score(scr):
 	current_score = myfont.render("Score: " + str(scr) , True, (225,225,0)) 
 	w.blit(current_score,[0,0]) 
-	
+
+#sound
 def play_sound():
 	pygame.mixer.init()
 	pygame.mixer.music.load("/storage/emulated/0/CODING/Sounds/shoot_sound.wav") 
 	pygame.mixer.music.play()
 
+#player bullet class
 class BulletClass(pygame.sprite.Sprite):
 	def __init__(self, x, y, w, h):
 		pygame.sprite.Sprite.__init__(self)
@@ -35,7 +38,7 @@ class BulletClass(pygame.sprite.Sprite):
 		self.image = pygame.Surface([w,h])
 		self.image.fill((225,0,0))
 		self.rect = self.image.get_rect()
-		
+#enemy class
 class EnemyClass(pygame.sprite.Sprite):
 	def __init__(self):
 		pygame.sprite.Sprite.__init__(self)
@@ -45,9 +48,10 @@ class EnemyClass(pygame.sprite.Sprite):
 		
 	def update(self):
 		self.rect.y += 1
-	
+
 BulletObj = BulletClass(100,100,10,20)
-	
+
+#levels
 EnemyGroup = pygame.sprite.Group() 
 for row in range(1):
 	for column in range(1,6):
@@ -90,6 +94,7 @@ for row4 in range(1,6):
 		
 BossImage = pygame.transform.scale(pygame.image.load('/storage/emulated/0/Download/boss1.png') , (200,200)) 
 
+#bossclass
 class BossClass(pygame.sprite.Sprite):
 		def __init__(self):
 			pygame.sprite.Sprite.__init__(self)
@@ -100,7 +105,7 @@ class BossClass(pygame.sprite.Sprite):
 			self.visible = True
 		def update(self):
 			self.rect.y += 1 
-			
+#boss bullet class
 class BossBulletClass(pygame.sprite.Sprite):
 		def __init__(self, x1, y1):
 			self.x = x1
@@ -122,6 +127,7 @@ BossBulletObj = BossBulletClass(250,0)
 
 boss_health = 20
 
+#main loop
 while True:
 	w.fill((0,0,0)) 
 
@@ -134,7 +140,7 @@ while True:
 	BulletGroup.draw(w)
 	EnemyGroup.draw(w) 
 	
-
+	#levels in mainloop
 	BulletObj.rect.y -= 20
 	for invaders in EnemyGroup:
 		invaders.update() 
