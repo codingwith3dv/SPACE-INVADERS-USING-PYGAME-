@@ -5,17 +5,21 @@
 import pygame
 import math
 import time
+import os
 pygame.init()
 
-w = pygame.display.set_mode((200,200))
+w = pygame.display.set_mode((720,800))
 clock = pygame.time.Clock()
 
-player_image =  pygame.image.load("/storage/emulated/0/Download/player.png")
+base_path = os.path.dirname(__file__)
+
+player_image =  pygame.image.load(os.path.join(base_path, "player.png"))
 player_image = pygame.transform.scale(player_image,(100,100)) 
 
-myfont = pygame.font.Font("/storage/emulated/0/CODING/Fonts/times new roman bold.ttf", 50)  
+myfont = pygame.font.SysFont("arial", 50)  
 
 current_players_score = 0
+threshold = 700
 
 def score(scr):
 	if scr == None:
@@ -25,7 +29,7 @@ def score(scr):
 	
 def play_sound():
 	pygame.mixer.init()
-	pygame.mixer.music.load("/storage/emulated/0/CODING/Sounds/shoot_sound.wav") 
+	pygame.mixer.music.load(os.path.join(base_path, "shoot_sound.mp3")) 
 	pygame.mixer.music.play()
 
 class BulletClass(pygame.sprite.Sprite):
@@ -91,7 +95,7 @@ for row4 in range(1,6):
 		EnemyObj4.rect.y = 50 + (50 * row4) 
 		EnemyGroup4.add(EnemyObj4) 
 		
-BossImage = pygame.transform.scale(pygame.image.load('/storage/emulated/0/Download/boss1.png') , (200,200)) 
+BossImage = pygame.transform.scale(pygame.image.load(os.path.join(base_path, "boss1.png")) , (200,200)) 
 
 class BossClass(pygame.sprite.Sprite):
 		def __init__(self):
@@ -126,22 +130,28 @@ BossBulletObj = BossBulletClass(250,0)
 boss_health = 20
 
 while True:
-	w.fill((0,0,0)) 
+	w.fill((0,0,0))
 
-	x, y = pygame.mouse.get_pos()   
+	for event in pygame.event.get():
+		if event.type==pygame.QUIT:
+      # if it is quit the game
+			pygame.quit()
+			exit(0)
+		pass
+
+	x, y = pygame.mouse.get_pos()
 	x1 = x - 50
-	y1 = y - 250 
+	y1 = y - 50 
 	
 	score(current_players_score)
 	
 	BulletGroup.draw(w)
 	EnemyGroup.draw(w) 
-	
 
 	BulletObj.rect.y -= 20
 	for invaders in EnemyGroup:
 		invaders.update() 
-		if(invaders.rect.y > 950 - 25):
+		if(invaders.rect.y > threshold - 25):
 					exit()
 		if pygame.sprite.spritecollide(invaders,BulletGroup,False):
 			invaders.kill() 
@@ -158,7 +168,7 @@ while True:
 		EnemyGroup1.draw(w) 
 		for invaders in EnemyGroup1:
 			invaders.update() 
-			if(invaders.rect.y > 950 - 25):
+			if(invaders.rect.y > threshold - 25):
 					exit() 
 			if pygame.sprite.spritecollide(invaders,BulletGroup,False): 
 				invaders.kill() 
@@ -175,7 +185,7 @@ while True:
 		EnemyGroup2.draw(w) 
 		for invaders in EnemyGroup2:
 			invaders.update() 
-			if(invaders.rect.y > 950 - 25):
+			if(invaders.rect.y > threshold - 25):
 					exit() 
 			if pygame.sprite.spritecollide(invaders,BulletGroup,False): 
 				invaders.kill() 
@@ -192,7 +202,7 @@ while True:
 		EnemyGroup3.draw(w) 
 		for invaders in EnemyGroup3:
 			invaders.update() 
-			if(invaders.rect.y > 950 - 25):
+			if(invaders.rect.y > threshold - 25):
 					exit() 
 			if pygame.sprite.spritecollide(invaders,BulletGroup,False): 
 				invaders.kill() 
@@ -209,7 +219,7 @@ while True:
 		EnemyGroup4.draw(w) 
 		for invaders in EnemyGroup4:
 			invaders.update() 
-			if(invaders.rect.y > 950 - 25):
+			if(invaders.rect.y > threshold - 25):
 					exit() 
 			if pygame.sprite.spritecollide(invaders,BulletGroup,False): 
 				invaders.kill() 
@@ -253,7 +263,7 @@ while True:
 		BulletObj.rect. x = x1 + 45
 
 	w.blit(player_image,(x1,y1))
-	pygame.draw.line(w, (225,0,0), (0,950), (720, 950),5)
+	pygame.draw.line(w, (225,0,0), (0,threshold), (720, threshold),5)
 	
 	clock.tick(60)
 	pygame.display.update()
